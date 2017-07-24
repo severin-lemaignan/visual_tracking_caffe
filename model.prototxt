@@ -1,0 +1,91 @@
+name: "VisualTrackingNet"
+layer {
+  name: "visualtracking_dataset"
+  type: "Python"
+  top: "bodyfeatures"
+  top: "targetposes"
+  include {
+    phase: TRAIN
+  }
+  python_param {
+    module: "python_layers.VisualTrackingData"
+    layer: "VisualTrackingLayer"
+    param_str: "{\'source\': \'visual_tracking_full_dataset.train.json\', \'batch_size\': 32, \'resize\': [256, 256]}"
+  }
+}
+layer {
+  name: "visualtracking_dataset"
+  type: "Python"
+  top: "bodyfeatures"
+  top: "targetposes"
+  include {
+    phase: TEST
+  }
+  python_param {
+    module: "python_layers.VisualTrackingData"
+    layer: "VisualTrackingLayer"
+    param_str: "{\'source\': \'visual_tracking_full_dataset.test.json\', \'batch_size\': 32, \'resize\': [256, 256]}"
+  }
+}
+layer {
+  name: "fc1"
+  type: "InnerProduct"
+  bottom: "bodyfeatures"
+  top: "fc1"
+  inner_product_param {
+    num_output: 64
+  }
+}
+layer {
+    name: "relu1"
+    type: "ReLU"
+    bottom: "fc1"
+    top: "fc1"
+    relu_param {
+        engine: CAFFE
+    }
+}
+layer {
+  name: "fc2"
+  type: "InnerProduct"
+  bottom: "fc1"
+  top: "fc2"
+  inner_product_param {
+    num_output: 32
+  }
+}
+layer {
+    name: "relu2"
+    type: "ReLU"
+    bottom: "fc2"
+    top: "fc2"
+    relu_param {
+        engine: CAFFE
+    }
+}
+layer {
+  name: "fc3"
+  type: "InnerProduct"
+  bottom: "fc2"
+  top: "fc3"
+  inner_product_param {
+    num_output: 2
+  }
+}
+layer {
+    name: "relu3"
+    type: "ReLU"
+    bottom: "fc3"
+    top: "fc3"
+    relu_param {
+        engine: CAFFE
+    }
+}
+layer {
+  name: "euclidloss"
+  type: "EuclideanLoss"
+  bottom: "fc3"
+  bottom: "targetposes"
+  top: "loss"
+}
+
