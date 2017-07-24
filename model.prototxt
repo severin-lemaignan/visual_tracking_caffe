@@ -73,15 +73,6 @@ layer {
   }
 }
 layer {
-    name: "relu3"
-    type: "ReLU"
-    bottom: "fc3"
-    top: "fc3"
-    relu_param {
-        engine: CAFFE
-    }
-}
-layer {
   name: "euclidloss"
   type: "EuclideanLoss"
   bottom: "fc3"
