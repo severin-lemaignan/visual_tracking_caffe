@@ -1,31 +1,9 @@
 name: "VisualTrackingNet"
 layer {
-  name: "visualtracking_dataset"
-  type: "Python"
-  top: "bodyfeatures"
-  top: "targetposes"
-  include {
-    phase: TRAIN
-  }
-  python_param {
-    module: "python_layers.VisualTrackingData"
-    layer: "VisualTrackingLayer"
-    param_str: "{\'source\': \'visual_tracking_full_dataset.train.json\', \'batch_size\': 128}"
-  }
-}
-layer {
-  name: "visualtracking_dataset"
-  type: "Python"
-  top: "bodyfeatures"
-  top: "targetposes"
-  include {
-    phase: TEST
-  }
-  python_param {
-    module: "python_layers.VisualTrackingData"
-    layer: "VisualTrackingLayer"
-    param_str: "{\'source\': \'visual_tracking_full_dataset.test.json\', \'batch_size\': 32}"
-  }
+    name: "data"
+    type: "Input"
+    top: "bodyfeatures"
+    input_param { shape: { dim: 1 dim: 64 } }
 }
 layer {
   name: "fc1"
@@ -130,7 +108,7 @@ layer {
   }
 }
 layer {
-    name: "relu6"
+    name: "relu4"
     type: "ReLU"
     bottom: "fc6"
     top: "fc6"
@@ -139,19 +117,12 @@ layer {
   name: "fc7"
   type: "InnerProduct"
   bottom: "fc6"
-  top: "fc7"
+  top: "result"
   inner_product_param {
     num_output: 2
     weight_filler {
           type: "xavier"
     }
   }
-}
-layer {
-  name: "euclidloss"
-  type: "EuclideanLoss"
-  bottom: "fc7"
-  bottom: "targetposes"
-  top: "loss"
 }
 

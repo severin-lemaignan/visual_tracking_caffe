@@ -39,6 +39,10 @@ class VisualTrackingLayer(caffe.Layer):
         Needs to implement in each class
         """
 
+
+        if (self._current_idx + self._batch_size) > len(self._data):
+            self._current_idx = 0
+
         res = [   self._data[self._current_idx:self._current_idx + self._batch_size],
                self._targets[self._current_idx:self._current_idx + self._batch_size]]
 
