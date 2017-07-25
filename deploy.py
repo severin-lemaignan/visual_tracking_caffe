@@ -40,7 +40,8 @@ data = [
 base = cv2.imread('res/map.png')
 base = cv2.resize(base,(600, 340))
 pts1 = np.float32([[0,0],[0,340],[600,340],[600,0]])
-pts2 = np.float32([[100,600],[600,500],[400,100],[50,100]])
+#pts2 = np.float32([[100,600],[600,500],[400,100],[50,100]])
+pts2 = np.float32([[50,550],[550,550],[450,50],[150,50]])
 M = cv2.getPerspectiveTransform(pts1,pts2)
 
 caffe.set_device(0)
@@ -81,10 +82,11 @@ while True:
     for t in Xfilters.keys():
         color = (255,255,255)
         if "purple" in t:
-            color = (200,0,100)
+            color = (250,0,150)
         if "yellow" in t:
-            color = (0,200,200)
-        cv2.circle(img,(int(Xfilters[t].get()), int(Yfilters[t].get())), 5, color, -1)
+            color = (0,250,250)
+        cv2.circle(img,(int(Xfilters[t].get()), int(Yfilters[t].get())), 4, color, -1, cv2.LINE_AA)
+        cv2.circle(img,(int(Xfilters[t].get()), int(Yfilters[t].get())), 20, color, 2, cv2.LINE_AA)
 
     dst = cv2.warpPerspective(img,M,(600,600))
     cv2.imshow('image',dst)
