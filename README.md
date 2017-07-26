@@ -3,5 +3,5 @@ A Caffe model to estimate gaze for the freeplay sandbox dataset
 
 Train with:
 ```
-> caffe train -solver train.prototxt
+> caffe train -log_dir logs -solver train.prototxt
 ```
