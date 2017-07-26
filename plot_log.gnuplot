@@ -28,6 +28,8 @@
 # papers chose to only publish the more favorable type. It is your freedom
 # to decide what to plot.
 
+if (!exists("filename")) filename='train.log'
+
 reset
 set terminal png
 set output "training.png"
@@ -41,7 +43,7 @@ set key right
 set title "Training loss vs. training iterations"
 set xlabel "Training iterations"
 set ylabel "Training loss"
-plot "train.log" using 1:3 title "visual tracking training
+plot filename using 1:3 title "visual tracking training
 
 # Training loss vs. training time
 # plot "mnist.log.train" using 2:3 title "mnist"
