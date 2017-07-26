@@ -1,0 +1,157 @@
+name: "VisualTrackingNet"
+layer {
+  name: "visualtracking_dataset"
+  type: "Python"
+  top: "bodyfeatures"
+  top: "targetposes"
+  include {
+    phase: TRAIN
+  }
+  python_param {
+    module: "python_layers.VisualTrackingData"
+    layer: "VisualTrackingLayer"
+    param_str: "{\'source\': \'visual_tracking_full_dataset.train.json\', \'batch_size\': 256}"
+  }
+}
+layer {
+  name: "visualtracking_dataset"
+  type: "Python"
+  top: "bodyfeatures"
+  top: "targetposes"
+  include {
+    phase: TEST
+  }
+  python_param {
+    module: "python_layers.VisualTrackingData"
+    layer: "VisualTrackingLayer"
+    param_str: "{\'source\': \'visual_tracking_full_dataset.test.json\', \'batch_size\': 256}"
+  }
+}
+layer {
+  name: "fc1"
+  type: "InnerProduct"
+  bottom: "bodyfeatures"
+  top: "fc1"
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+    name: "tanh1"
+    type: "TanH"
+    bottom: "fc1"
+    top: "fc1"
+}
+layer {
+  name: "fc2"
+  type: "InnerProduct"
+  bottom: "fc1"
+  top: "fc2"
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+    name: "tanh2"
+    type: "TanH"
+    bottom: "fc2"
+    top: "fc2"
+}
+layer {
+  name: "fc3"
+  type: "InnerProduct"
+  bottom: "fc2"
+  top: "fc3"
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+    name: "tanh3"
+    type: "TanH"
+    bottom: "fc3"
+    top: "fc3"
+}
+layer {
+  name: "fc4"
+  type: "InnerProduct"
+  bottom: "fc3"
+  top: "fc4"
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+    name: "tanh4"
+    type: "TanH"
+    bottom: "fc4"
+    top: "fc4"
+}
+layer {
+  name: "fc5"
+  type: "InnerProduct"
+  bottom: "fc4"
+  top: "fc5"
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+    name: "tanh5"
+    type: "TanH"
+    bottom: "fc5"
+    top: "fc5"
+}
+layer {
+  name: "fc6"
+  type: "InnerProduct"
+  bottom: "fc5"
+  top: "fc6"
+  inner_product_param {
+    num_output: 64
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+    name: "tanh6"
+    type: "TanH"
+    bottom: "fc6"
+    top: "fc6"
+}
+layer {
+  name: "fc_out"
+  type: "InnerProduct"
+  bottom: "fc6"
+  top: "fc_out"
+  inner_product_param {
+    num_output: 2
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+  name: "euclidloss"
+  type: "EuclideanLoss"
+  bottom: "fc_out"
+  bottom: "targetposes"
+  top: "loss"
+}
+

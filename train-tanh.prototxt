@@ -1,9 +1,9 @@
 # The train/test net protocol buffer definition
-net: "model.prototxt"
+net: "model-tanh.prototxt"
 # test_iter specifies how many forward passes the test should carry out.
-# In the case of MNIST, we have test batch size 100 and 100 test iterations,
-# covering the full 10,000 testing images.
-test_iter: 1000
+# In the case of visual tracking, we have test batch size 256 and 118 test iterations,
+# covering the full ~30,000 testing images.
+test_iter: 118
 # Carry out testing every 50000 training iterations.
 test_interval: 50000
 # The base learning rate, momentum and the weight decay of the network.
@@ -14,12 +14,12 @@ weight_decay: 0.0005
 lr_policy: "inv"
 gamma: 0.0001
 power: 0.75
-# Display every 50000 iterations
+# Display every X iterations
 display: 50000
 # The maximum number of iterations
-max_iter: 15000000
+max_iter: 5000000
 # snapshot intermediate results
-snapshot: 100000
-snapshot_prefix: "snapshots/visual_tracking"
+snapshot: 500000
+snapshot_prefix: "snapshots/visual_tracking_tanh"
 # solver mode: CPU or GPU
 solver_mode: GPU

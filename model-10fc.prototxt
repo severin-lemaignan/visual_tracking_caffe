@@ -10,7 +10,7 @@ layer {
   python_param {
     module: "python_layers.VisualTrackingData"
     layer: "VisualTrackingLayer"
-    param_str: "{\'source\': \'visual_tracking_full_dataset.train.json\', \'batch_size\': 128}"
+    param_str: "{\'source\': \'visual_tracking_full_dataset.train.json\', \'batch_size\': 256}"
   }
 }
 layer {
@@ -24,7 +24,7 @@ layer {
   python_param {
     module: "python_layers.VisualTrackingData"
     layer: "VisualTrackingLayer"
-    param_str: "{\'source\': \'visual_tracking_full_dataset.test.json\', \'batch_size\': 32}"
+    param_str: "{\'source\': \'visual_tracking_full_dataset.test.json\', \'batch_size\': 256}"
   }
 }
 layer {
@@ -105,7 +105,7 @@ layer {
   bottom: "fc4"
   top: "fc5"
   inner_product_param {
-    num_output: 64
+    num_output: 32
     weight_filler {
           type: "xavier"
     }
@@ -123,7 +123,7 @@ layer {
   bottom: "fc5"
   top: "fc6"
   inner_product_param {
-    num_output: 64
+    num_output: 32
     weight_filler {
           type: "xavier"
     }
@@ -141,6 +141,60 @@ layer {
   bottom: "fc6"
   top: "fc7"
   inner_product_param {
+    num_output: 32
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+    name: "relu7"
+    type: "ReLU"
+    bottom: "fc7"
+    top: "fc7"
+}
+layer {
+  name: "fc8"
+  type: "InnerProduct"
+  bottom: "fc7"
+  top: "fc8"
+  inner_product_param {
+    num_output: 32
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+    name: "relu8"
+    type: "ReLU"
+    bottom: "fc8"
+    top: "fc8"
+}
+layer {
+  name: "fc9"
+  type: "InnerProduct"
+  bottom: "fc8"
+  top: "fc9"
+  inner_product_param {
+    num_output: 16
+    weight_filler {
+          type: "xavier"
+    }
+  }
+}
+layer {
+    name: "relu9"
+    type: "ReLU"
+    bottom: "fc9"
+    top: "fc9"
+}
+layer {
+  name: "fc_out"
+  type: "InnerProduct"
+  bottom: "fc9"
+  top: "fc_out"
+  inner_product_param {
     num_output: 2
     weight_filler {
           type: "xavier"
@@ -150,7 +204,7 @@ layer {
 layer {
   name: "euclidloss"
   type: "EuclideanLoss"
-  bottom: "fc7"
+  bottom: "fc_out"
   bottom: "targetposes"
   top: "loss"
 }
